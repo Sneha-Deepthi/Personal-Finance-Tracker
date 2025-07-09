@@ -15,12 +15,6 @@ A simple and intuitive web app to track your personal finances — built with Ne
 
 ---
 
-## 📸 Screenshots
-
-> _You can add screenshots here once available_
-
----
-
 ## 🚀 Live Demo
 
 👉 [Click here to view the live app](https://personal-finance-tracker-beryl-eta.vercel.app)
