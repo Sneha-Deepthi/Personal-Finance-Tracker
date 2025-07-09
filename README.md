@@ -1,40 +1,107 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+# Personal Finance Tracker 💰
 
-First, run the development server:
+A simple and intuitive web app to track your personal finances — built with Next.js, MongoDB, Recharts, and shadcn/ui.
+
+---
+
+## ✨ Features
+
+- ✅ Add, edit, and delete transactions
+- 📅 Monthly expense visualization with interactive bar charts
+- 📊 Category-wise expense breakdown (coming soon)
+- 🌐 Live deployment with Vercel
+- ⚡ Responsive and dark mode-friendly UI
+
+---
+
+## 📸 Screenshots
+
+> _You can add screenshots here once available_
+
+---
+
+## 🚀 Live Demo
+
+👉 [Click here to view the live app](https://personal-finance-tracker-beryl-eta.vercel.app)
+
+---
+
+## 🔗 GitHub Repository
+
+👉 [https://github.com/Sneha-Deepthi/Personal-Finance-Tracker](https://github.com/Sneha-Deepthi/Personal-Finance-Tracker)
+
+---
+
+## 🛠 Tech Stack
+
+- **Frontend**: [Next.js](https://nextjs.org/), [React](https://reactjs.org/)
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
+- **Charts**: [Recharts](https://recharts.org/)
+- **Backend API**: Next.js API routes
+- **Database**: [MongoDB Atlas](https://www.mongodb.com/atlas)
+
+---
+
+## 📁 Project Structure (Key Files)
+
+```
+/app
+  /api/transactions      # API routes for CRUD
+  /components            # UI components 
+  /page.tsx              # Main dashboard page
+/components/ui           # shadcn/ui components
+/lib/mongo.ts            # MongoDB connection utility
+/models                  #MongoDB document schema
+```
+
+---
+
+## 🧪 Local Development
+
+1. **Clone the repo**:
+
+```bash
+git clone https://github.com/Sneha-Deepthi/Personal-Finance-Tracker.git
+cd Personal-Finance-Tracker
+```
+
+2. **Install dependencies**:
+
+```bash
+npm install
+# or
+yarn install
+```
+
+3. **Create `.env.local`**:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+```
+
+4. **Run the development server**:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Visit [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Deployment
 
-## Learn More
+The app is deployed on [Vercel](https://vercel.com). Every push to `main` automatically triggers a new deployment.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📝 License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project is licensed under the [MIT License](LICENSE).
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🙋‍♀️ Author
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# Personal-Finance-Tracker
->>>>>>> 644a66bab3682e8e24de7ea543a95546d7d2ce55
+Built with ❤️ by [Sneha Deepthi](https://github.com/Sneha-Deepthi)
