@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
-export default function TransactionList({ onEdit, refreshFlag }) {
+export default function TransactionList({ onEdit, refreshFlag, onRefresh}) {
   const [transactions, setTransactions] = useState([])
 
   const fetchTransactions = async () => {
@@ -15,6 +15,7 @@ export default function TransactionList({ onEdit, refreshFlag }) {
   const handleDelete = async (id) => {
     await fetch(`/api/transactions/${id}`, { method: 'DELETE' })
     fetchTransactions()
+    onRefresh()
   }
 
   useEffect(() => {
