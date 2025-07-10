@@ -38,7 +38,7 @@ export default function Home() {
       <Tabs defaultValue="add" className="w-full">
         {/* Responsive Tabs List */}
         <div className="overflow-x-auto">
-          <TabsList className="px-1 py-1.5 h-fit min-w-[400px] sm:min-w-0 grid grid-cols-2 sm:grid-cols-4 gap-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+          <TabsList className="px-1 py-1.5 h-fit min-w-[200px] sm:min-w-0 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
             <TabsTrigger 
               value="add" 
               className="whitespace-nowrap text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 data-[state=active]:bg-blue-100 dark:data-[state=active]:bg-blue-900 data-[state=active]:text-blue-700 dark:data-[state=active]:text-blue-200 font-medium transition-colors duration-200"
