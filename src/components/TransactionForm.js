@@ -100,7 +100,7 @@ export default function TransactionForm({ onSave, editing }) {
             ))}
           </select>
         </div>
-        <Button type="submit" className="w-full">
+        <Button type="submit" className="w-full dark:text-black dark:bg-white dark:hover:bg-white">
           {editing ? 'Update Transaction' : 'Add Transaction'}
         </Button>
       </form>

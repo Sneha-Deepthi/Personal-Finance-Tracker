@@ -26,7 +26,7 @@ export default function TransactionList({ onEdit, refreshFlag, onRefresh }) {
 
   return (
     <div className="p-4 space-y-4 rounded-xl bg-white dark:bg-gray-700 text-black dark:text-white border-1 dark:border-white">
-      <h2 className="font-bold text-2xl dark:text-black dark:text-shadow-lg/20 dark:text-shadow-white">Transaction list</h2>
+      <h2 className="font-bold text-2xl dark:text-cyan-400 dark:text-shadow-lg/10 dark:text-shadow-gray-700">Transaction list</h2>
       {transactions.length === 0 ? (
         <p className="text-gray-500 dark:text-gray-300">No transactions to display.</p>
       ) : (

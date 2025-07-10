@@ -37,12 +37,12 @@ export default function Dashboard({ refreshFlag }) {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <Card className="p-4 bg-white dark:bg-gray-700 text-black dark:text-white">
-          <h3 className="font-bold text-2xl dark:text-black dark:text-shadow-lg/20 dark:text-shadow-white">Total Expenses</h3>
+          <h3 className="font-bold text-2xl dark:text-cyan-400 dark:text-shadow-lg/10 dark:text-shadow-gray-700">Total Expenses</h3>
           <p className="text-2xl font-bold mt-2">₹{total.toFixed(2)}</p>
         </Card>
 
         <Card className="p-4 bg-white dark:bg-gray-700 text-black dark:text-white">
-          <h3 className="font-bold text-2xl dark:text-black dark:text-shadow-lg/20 dark:text-shadow-white">Category Breakdown</h3>
+          <h3 className="font-bold text-2xl dark:text-cyan-400 dark:text-shadow-lg/10 dark:text-shadow-gray-700">Category Breakdown</h3>
           <ul className="mt-2 space-y-1">
             {categories.map((cat) => (
               <li key={cat} className="flex justify-between">
@@ -54,7 +54,7 @@ export default function Dashboard({ refreshFlag }) {
         </Card>
 
         <Card className="p-4 bg-white dark:bg-gray-700 text-black dark:text-white">
-            <h3 className="font-bold text-2xl dark:text-black dark:text-shadow-lg/20 dark:text-shadow-white">Recent Transactions</h3>
+            <h3 className="font-bold text-2xl dark:text-cyan-400 dark:text-shadow-lg/10 dark:text-shadow-gray-700">Recent Transactions</h3>
             {recentTx.length === 0 ? (
                 <p className="text-sm text-gray-500 dark:text-gray-300">No recent transactions</p>
             ) : (

@@ -23,7 +23,7 @@ export default function Home() {
 
   return (
     <main className="p-6 max-w-7xl mx-auto">
-      <h1 className="py-2 text-3xl font-bold text-center mb-6 text-blue-700 dark:text-blue-50 bg-blue-50 dark:bg-blue-950 sticky top-0 z-10">
+      <h1 className="py-2 text-3xl font-bold text-center mb-6 text-blue-700 dark:text-blue-50 bg-blue-50 dark:bg-black sticky top-0 z-10">
         PERSONAL FINANCE TRACKER
       </h1>
 

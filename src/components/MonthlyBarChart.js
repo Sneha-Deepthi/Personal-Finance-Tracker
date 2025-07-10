@@ -53,7 +53,7 @@ export default function MonthlyBarChart({ refreshFlag }) {
 
   return (
     <Card className="p-4 bg-white dark:bg-gray-700 text-black dark:text-white">
-      <h2 className="font-bold text-2xl dark:text-black dark:text-shadow-lg/20 dark:text-shadow-white">Monthly Expenses</h2>
+      <h2 className="font-bold text-2xl dark:text-cyan-400 dark:text-shadow-lg/10 dark:text-shadow-gray-700">Monthly Expenses</h2>
 
       {loading ? (
         <p className="text-gray-500 dark:text-gray-200">Loading chart...</p>
