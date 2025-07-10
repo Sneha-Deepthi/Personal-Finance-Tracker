@@ -60,7 +60,7 @@ export default function MonthlyBarChart({ refreshFlag }) {
       ) : data.length === 0 ? (
         <p className="text-gray-500 dark:text-gray-200">No transactions available</p>
       ) : (
-        <ResponsiveContainer width="90%" height={300}>
+        <ResponsiveContainer width="80%" height={300}>
           <BarChart data={data}>
             <XAxis dataKey="month" stroke="currentColor" />
             <YAxis stroke="currentColor" tickFormatter={(v) => `₹${v}`} />
