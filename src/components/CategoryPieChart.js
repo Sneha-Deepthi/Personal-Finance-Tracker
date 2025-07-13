@@ -77,11 +77,9 @@ export default function CategoryPieChart({ refreshFlag }) {
   return (
     <Card className="p-4 bg-white dark:bg-gray-700 text-black dark:text-white w-full max-w-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
-        <h3 className="font-bold text-2xl dark:text-cyan-400 dark:text-shadow-lg/10 dark:text-shadow-gray-700">Expenses by Category</h3>
-
         <div className="flex flex-wrap gap-2">
           <Select onValueChange={(val) => setSelectedMonth(val)} value={selectedMonth}>
-            <SelectTrigger className="w-[100px] sm:w-[120px]">
+            <SelectTrigger className="w-[100px] sm:w-[120px] peer">
               <SelectValue placeholder="Month" />
             </SelectTrigger>
             <SelectContent>
@@ -94,7 +92,7 @@ export default function CategoryPieChart({ refreshFlag }) {
           </Select>
 
           <Select onValueChange={(val) => setSelectedYear(val)} value={selectedYear}>
-            <SelectTrigger className="w-[100px] sm:w-[120px]">
+            <SelectTrigger className="w-[100px] sm:w-[120px] peer">
               <SelectValue placeholder="Year" />
             </SelectTrigger>
             <SelectContent>

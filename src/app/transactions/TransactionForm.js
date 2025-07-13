@@ -54,7 +54,7 @@ export default function TransactionForm({ onSave, editing }) {
   }
 
   return (
-    <Card className="p-6 space-y-4 bg-white dark:bg-gray-700 text-black dark:text-white">
+    <Card className="p-6 space-y-2 bg-white dark:bg-gray-700 text-black dark:text-white">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <Label className="py-2 dark:text-white text-md">Amount (₹)</Label>
