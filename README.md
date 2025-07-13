@@ -1,101 +1,126 @@
 
-# Personal Finance Tracker 💰
+# 💰 Personal Finance Tracker
 
-A simple and intuitive web app to track your personal finances — built with Next.js, MongoDB, Recharts, and shadcn/ui.
-
----
-
-## ✨ Features
-
-- ✅ Add, edit, and delete transactions
-- 📅 Monthly expense visualization with interactive bar charts
-- 📊 Category-wise expense breakdown (coming soon)
-- 🌐 Live deployment with Vercel
-- ⚡ Responsive and dark mode-friendly UI
+A modern, responsive web application to **track, visualize, and manage personal finances** effectively — built using Next.js, MongoDB, Recharts, and shadcn/ui.
 
 ---
 
 ## 🚀 Live Demo
 
-👉 [Click here to view the live app](https://personal-finance-tracker-beryl-eta.vercel.app)
-
----
+👉 [Live App on Vercel](https://personal-finance-tracker-beryl-eta.vercel.app)
 
 ## 🔗 GitHub Repository
 
-👉 [https://github.com/Sneha-Deepthi/Personal-Finance-Tracker](https://github.com/Sneha-Deepthi/Personal-Finance-Tracker)
+👉 [GitHub: Sneha-Deepthi/Personal-Finance-Tracker](https://github.com/Sneha-Deepthi/Personal-Finance-Tracker)
 
 ---
 
-## 🛠 Tech Stack
+## ✨ Features
 
-- **Frontend**: [Next.js](https://nextjs.org/), [React](https://reactjs.org/)
-- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
-- **Charts**: [Recharts](https://recharts.org/)
-- **Backend API**: Next.js API routes
-- **Database**: [MongoDB Atlas](https://www.mongodb.com/atlas)
+### ✅ Stage 1: Basic Transaction Tracking
+- Add/Edit/Delete transactions (with amount, date, and description)
+- View transactions in a list
+- Monthly expense chart (Bar graph)
+- Basic form validations
+
+### 📊 Stage 2: Categorization
+- Predefined transaction categories
+- Category-wise Pie Chart (for expense breakdown)
+- Dashboard with:
+  - 💸 Total Expenses card
+  - 📂 Category Breakdown card
+  - 🕒 Recent Transactions list
+
+### 💡 Stage 3: Budgeting & Insights
+- Create monthly budgets by category
+- Budget vs Actual Comparison Chart (Bar graph)
+- Smart spending insights for users
+
+### 🌙 UI/UX & Experience
+- Responsive layout across devices
+- Fully supports Dark Mode
+- Clean and user-friendly interface
 
 ---
 
-## 📁 Project Structure (Key Files)
+## 🧠 Tech Stack
+
+| Layer        | Technology                         |
+|--------------|-------------------------------------|
+| Frontend     | Next.js, React                     |
+| Styling/UI   | Tailwind CSS, shadcn/ui            |
+| Charts       | Recharts                           |
+| Backend      | Next.js API Routes                 |
+| Database     | MongoDB Atlas                      |
+
+---
+
+## 🧱 Folder Structure
 
 ```
-/app
-  /api/transactions      # API routes for CRUD
-  /components            # UI components 
-  /page.tsx              # Main dashboard page
-/components/ui           # shadcn/ui components
-/lib/mongo.ts            # MongoDB connection utility
-/models                  #MongoDB document schema
+/src
+ ├── app/
+ │   ├── api/
+ │   │   ├── transactions/    # API routes for transaction CRUD
+ │   │   └── budgets/         # API routes for budgets
+ │   ├── transactions/        # Transaction page components
+ │   ├── budget/              # Budget form, chart, insights
+ |   ├── NavBar/
+ │   ├── layout.js
+ │   ├── globals.css          # Global styles
+ |   └── page.js
+ ├── components/
+ │   ├── ui/                  # shadcn/ui components
+ │   ├── CategoryPieChart.js
+ │   └── Dashboard.js
+ ├── lib/
+ │   ├── categories.js        # Predefined categories
+ │   ├── mongo.js
+ │   └── utils.js
+ └── models/
+     ├── Budget.js            # Mongoose model
+     └── Transaction.js       # Mongoose model
 ```
 
 ---
 
-## 🧪 Local Development
-
-1. **Clone the repo**:
+## 🧪 Running Locally
 
 ```bash
+# 1. Clone the repository
 git clone https://github.com/Sneha-Deepthi/Personal-Finance-Tracker.git
 cd Personal-Finance-Tracker
-```
 
-2. **Install dependencies**:
-
-```bash
+# 2. Install dependencies
 npm install
-# or
-yarn install
+
+# 3. Create the environment file
+touch .env.local
 ```
 
-3. **Create `.env.local`**:
+Inside `.env.local`:
 
-```env
+```
 MONGODB_URI=your_mongodb_connection_string
 ```
 
-4. **Run the development server**:
-
 ```bash
+# 4. Run the dev server
 npm run dev
+
+# 5. Open in browser
+http://localhost:3000
 ```
 
-5. Visit [http://localhost:3000](http://localhost:3000)
+---
+
+## 🌍 Deployment
+
+- Deployed on [Vercel](https://vercel.com/)
+- Auto-deployment on every push to `main`
 
 ---
 
-## 📦 Deployment
-
-The app is deployed on [Vercel](https://vercel.com). Every push to `main` automatically triggers a new deployment.
-
----
-
-## 📝 License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-## 🙋‍♀️ Author
+## 👩‍💻 Author
 
 Built with ❤️ by [Sneha Deepthi](https://github.com/Sneha-Deepthi)
