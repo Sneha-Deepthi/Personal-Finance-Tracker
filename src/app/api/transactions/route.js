@@ -3,8 +3,11 @@ import Transaction from '@/models/Transaction'
 import { cookies } from 'next/headers'
 import { getUserIdFromToken } from '@/lib/auth'
 
+// GET transactions
 export async function GET(req) {
-  const cookieStore = await cookies() // ✅ await is required here
+  await connectDB() // also connect before querying
+
+  const cookieStore = await cookies() // ✅ await is required
   const token = cookieStore.get('token')?.value
 
   const userId = await getUserIdFromToken(token)
@@ -16,15 +19,16 @@ export async function GET(req) {
   return Response.json(transactions)
 }
 
+// POST transaction
 export async function POST(req) {
   await connectDB()
 
-  const cookieStore = cookies()
+  const cookieStore = await cookies() // ✅ fixed here
   const token = cookieStore.get('token')?.value
   const userId = await getUserIdFromToken(token)
 
   if (!userId) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 })
+    return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   const data = await req.json()

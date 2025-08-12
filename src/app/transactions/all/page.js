@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import TransactionForm from '../TransactionForm'
 import { getUserIdFromCookie } from '@/utils/getUserIdFromCookie'
+import mongoose from 'mongoose'
 
 export default function AllTransactionsPage() {
   const [transactions, setTransactions] = useState([])
@@ -13,26 +14,38 @@ export default function AllTransactionsPage() {
 
   useEffect(() => {
     const uid = getUserIdFromCookie()
-    if (!uid) return // optionally redirect or show error
+    if (!uid) return
     setUserId(uid)
   }, [])
 
   const fetchTransactions = async () => {
     if (!userId) return
-
     const res = await fetch(`/api/transactions`, { credentials: 'include' })
-
     const data = await res.json()
     const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date))
     setTransactions(sorted)
   }
 
   const handleDelete = async (id) => {
-    await fetch(`/api/transactions/${id}?userId=${userId}`, {
+    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+      alert('Invalid transaction ID.')
+      return
+    }
+
+    const confirmDelete = confirm('Are you sure you want to delete this transaction?')
+    if (!confirmDelete) return
+
+    const res = await fetch(`/api/transactions/${id}`, {
       method: 'DELETE',
       credentials: 'include',
     })
-    fetchTransactions()
+
+    if (res.ok) {
+      fetchTransactions()
+    } else {
+      const err = await res.json()
+      alert(err.message || 'Error deleting transaction')
+    }
   }
 
   const handleEdit = (tx) => {

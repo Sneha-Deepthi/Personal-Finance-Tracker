@@ -29,9 +29,9 @@ export default function BudgetList({ refreshFlag, onEdit, onChange }) {
 
   const fetchBudgets = async () => {
     try {
-      const res = await fetch(`/api/budgets`) // ✅ userId removed
-      const data = await res.json()
-      setBudgets(data)
+      const res = await fetch(`/api/budgets`);
+      const data = await res.json();
+      setBudgets(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Failed to fetch budgets:', error)
     }
