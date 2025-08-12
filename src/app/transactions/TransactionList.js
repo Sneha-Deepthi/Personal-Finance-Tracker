@@ -4,11 +4,11 @@ import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 
-export default function TransactionList({ onEdit, refreshFlag, onRefresh }) {
+export default function TransactionList({ onEdit, refreshFlag, onRefresh , userId }) {
   const [transactions, setTransactions] = useState([])
-
+  
   const fetchTransactions = async () => {
-    const res = await fetch('/api/transactions')
+    const res = await fetch(`/api/transactions`, { credentials: 'include' })
     const data = await res.json()
     const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date))
     setTransactions(sorted)

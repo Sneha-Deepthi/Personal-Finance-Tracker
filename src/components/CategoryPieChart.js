@@ -30,29 +30,47 @@ const MONTHS = [
 export default function CategoryPieChart({ refreshFlag }) {
   const [transactions, setTransactions] = useState([])
   const [data, setData] = useState([])
-
   const [selectedMonth, setSelectedMonth] = useState('')
   const [selectedYear, setSelectedYear] = useState('')
   const [availableYears, setAvailableYears] = useState([])
 
+  // ✅ Check if user is logged in before fetching
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch('/api/transactions')
-      const txs = await res.json()
-      setTransactions(txs)
+      const userId = localStorage.getItem('userId')
+      if (!userId) {
+        console.error('User not logged in')
+        return
+      }
 
-      const years = [...new Set(txs.map((tx) => new Date(tx.date).getFullYear()))]
-      setAvailableYears(years.sort((a, b) => b - a))
+      try {
+        const res = await fetch(`/api/transactions?userId=${userId}`)
+        const txs = await res.json()
 
-      const today = new Date()
-      setSelectedMonth(String(today.getMonth()))
-      setSelectedYear(String(today.getFullYear()))
+        if (!Array.isArray(txs)) {
+          console.error('Expected array but got:', txs)
+          return
+        }
+
+        setTransactions(txs)
+
+        const years = [...new Set(txs.map((tx) => new Date(tx.date).getFullYear()))]
+        setAvailableYears(years.sort((a, b) => b - a))
+
+        const today = new Date()
+        setSelectedMonth(String(today.getMonth()))
+        setSelectedYear(String(today.getFullYear()))
+      } catch (err) {
+        console.error('Failed to fetch transactions:', err)
+      }
     }
 
     fetchData()
   }, [refreshFlag])
 
   useEffect(() => {
+    if (!Array.isArray(transactions)) return
+
     const filtered = transactions.filter((tx) => {
       const date = new Date(tx.date)
       const matchMonth = selectedMonth === '' || date.getMonth().toString() === selectedMonth

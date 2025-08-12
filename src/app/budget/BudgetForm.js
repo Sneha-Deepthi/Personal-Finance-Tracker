@@ -31,7 +31,7 @@ export default function BudgetForm({ onSaved, initialData }) {
     e.preventDefault()
 
     const method = initialData ? 'PUT' : 'POST'
-    const url = initialData ? `/api/budgets/${initialData._id}` : '/api/budgets'
+    const url = initialData ? `/api/budgets/${initialData._id}` : `/api/budgets`
 
     await fetch(url, {
       method,
@@ -45,7 +45,6 @@ export default function BudgetForm({ onSaved, initialData }) {
       }),
     })
 
-    // Reset form
     setCategory('')
     setAmount('')
     setMonth(new Date().toISOString().slice(0, 7))
@@ -55,19 +54,15 @@ export default function BudgetForm({ onSaved, initialData }) {
   return (
     <Card className="p-6 space-y-4 bg-white dark:bg-gray-700 text-black dark:text-white">
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Category */}
         <div>
           <Label className="py-2 dark:text-white text-md">Category</Label>
           <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger className="w-full dark:bg-gray-600 dark:text-white dark:data-[placeholder]:text-white peer">
-              <SelectValue
-                placeholder="Select category"
-                className="dark:placeholder-white"
-              />
+            <SelectTrigger className="w-full dark:bg-gray-600 dark:text-white">
+              <SelectValue placeholder="Select category" />
             </SelectTrigger>
             <SelectContent className="dark:bg-gray-700 dark:text-white">
               {categories.map((cat) => (
-                <SelectItem key={cat} value={cat} className="dark:text-white">
+                <SelectItem key={cat} value={cat}>
                   {cat}
                 </SelectItem>
               ))}
@@ -75,7 +70,6 @@ export default function BudgetForm({ onSaved, initialData }) {
           </Select>
         </div>
 
-        {/* Amount */}
         <div>
           <Label className="py-2 dark:text-white text-md">Budget Amount (₹)</Label>
           <Input
@@ -85,11 +79,10 @@ export default function BudgetForm({ onSaved, initialData }) {
             min="0"
             required
             placeholder="Enter amount"
-            className="dark:bg-gray-600 dark:text-white dark:placeholder-white"
+            className="dark:bg-gray-600 dark:text-white"
           />
         </div>
 
-        {/* Month */}
         <div>
           <Label className="py-2 dark:text-white text-md">Budget Month</Label>
           <Input
@@ -97,13 +90,11 @@ export default function BudgetForm({ onSaved, initialData }) {
             onChange={(e) => setMonth(e.target.value)}
             type="month"
             required
-            placeholder="Select month"
-            className="dark:bg-gray-600 dark:text-white dark:placeholder-white"
+            className="dark:bg-gray-600 dark:text-white"
           />
         </div>
 
-        {/* Submit */}
-        <Button type="submit" className="w-full dark:text-black dark:bg-white dark:hover:bg-white">
+        <Button type="submit" className="w-full dark:text-black dark:bg-white">
           {initialData ? 'Update Budget' : 'Save Budget'}
         </Button>
       </form>

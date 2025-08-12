@@ -21,7 +21,7 @@ const getMonthYear = (monthStr) => {
   return `${monthNames[parseInt(month) - 1]} ${year}`
 }
 
-export default function BudgetList({ refreshFlag, onEdit }) {
+export default function BudgetList({ refreshFlag, onEdit, onChange }) {
   const [budgets, setBudgets] = useState([])
   const [filteredBudgets, setFilteredBudgets] = useState([])
   const [filterMonth, setFilterMonth] = useState('')
@@ -29,7 +29,7 @@ export default function BudgetList({ refreshFlag, onEdit }) {
 
   const fetchBudgets = async () => {
     try {
-      const res = await fetch('/api/budgets')
+      const res = await fetch(`/api/budgets`) // ✅ userId removed
       const data = await res.json()
       setBudgets(data)
     } catch (error) {
@@ -39,8 +39,14 @@ export default function BudgetList({ refreshFlag, onEdit }) {
 
   const handleDelete = async (id) => {
     try {
-      await fetch(`/api/budgets/${id}`, { method: 'DELETE' })
+      await fetch(`/api/budgets/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      })
       fetchBudgets()
+      if (typeof onChange === 'function') {
+        onChange() // ✅ Notify parent to refresh charts and insights
+      }
     } catch (err) {
       console.error('Delete failed:', err)
     }
@@ -70,15 +76,12 @@ export default function BudgetList({ refreshFlag, onEdit }) {
 
   return (
     <Card className="p-4 space-y-4 bg-white dark:bg-gray-700 text-black dark:text-white">
-      {/* <h2 className="text-lg font-semibold text-cyan-500 dark:text-cyan-400">Your Budgets</h2> */}
-
-      {/* Filters */}
       <div className="flex gap-4 flex-wrap">
         <Select value={filterMonth} onValueChange={setFilterMonth}>
-          <SelectTrigger className="w-full md:w-1/3 dark:bg-gray-600 dark:data-[placeholder]:text-white border border-gray-300 dark:border-gray-50 peer">
+          <SelectTrigger className="w-full md:w-1/3 dark:bg-gray-600">
             <SelectValue placeholder="Filter by Month" />
           </SelectTrigger>
-          <SelectContent className="dark:bg-gray-700 dark:text-white">
+          <SelectContent className="dark:bg-gray-700">
             {monthOptions.map((m) => (
               <SelectItem key={m} value={m}>
                 {monthNames[parseInt(m) - 1]}
@@ -88,10 +91,10 @@ export default function BudgetList({ refreshFlag, onEdit }) {
         </Select>
 
         <Select value={filterYear} onValueChange={setFilterYear}>
-          <SelectTrigger className="w-full md:w-1/3 dark:bg-gray-600 dark:data-[placeholder]:text-white border border-gray-300 dark:border-gray-50 peer">
+          <SelectTrigger className="w-full md:w-1/3 dark:bg-gray-600">
             <SelectValue placeholder="Filter by Year" />
           </SelectTrigger>
-          <SelectContent className="dark:bg-gray-700 dark:text-white">
+          <SelectContent className="dark:bg-gray-700">
             {yearOptions.map((y) => (
               <SelectItem key={y} value={y}>
                 {y}
@@ -101,7 +104,6 @@ export default function BudgetList({ refreshFlag, onEdit }) {
         </Select>
       </div>
 
-      {/* Budget List */}
       {filteredBudgets.length === 0 ? (
         <p className="text-gray-500">No budgets match the filter.</p>
       ) : (
@@ -120,7 +122,6 @@ export default function BudgetList({ refreshFlag, onEdit }) {
                       variant="outline"
                       size="sm"
                       onClick={() => onEdit?.(budget)}
-                      className="text-blue-600 border-blue-300 hover:bg-blue-50 dark:border-white dark:text-white"
                     >
                       Edit
                     </Button>
@@ -128,7 +129,6 @@ export default function BudgetList({ refreshFlag, onEdit }) {
                       variant="outline"
                       size="sm"
                       onClick={() => handleDelete(budget._id)}
-                      className="text-red-600 border-red-300 hover:bg-red-50 dark:border-white dark:bg-red-600 dark:text-white"
                     >
                       Delete
                     </Button>

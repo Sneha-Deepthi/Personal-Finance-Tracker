@@ -1,4 +1,5 @@
 'use client'
+
 import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import {
@@ -26,38 +27,47 @@ export default function BudgetVsActualChart({ refreshFlag }) {
   const [chartData, setChartData] = useState([])
   const [filteredData, setFilteredData] = useState([])
   const [selectedCategory, setSelectedCategory] = useState('__all__')
-  const currentMonth = new Date().toISOString().slice(0, 7)
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth)
+  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7))
 
   useEffect(() => {
     const loadData = async () => {
-      const [txRes, budgetRes] = await Promise.all([
-        fetch('/api/transactions'),
-        fetch('/api/budgets'),
-      ])
-      const transactions = await txRes.json()
-      const budgets = await budgetRes.json()
+      try {
+        const [txRes, budgetRes] = await Promise.all([
+          fetch(`/api/transactions`), // ✅ removed userId param
+          fetch(`/api/budgets`),      // ✅ removed userId param
+        ])
 
-      const actualByCategoryAndMonth = {}
-      transactions.forEach((tx) => {
-        const cat = tx.category || 'Uncategorized'
-        const month = tx.date?.slice(0, 7) || 'unknown'
-        const key = `${cat}-${month}`
-        actualByCategoryAndMonth[key] = (actualByCategoryAndMonth[key] || 0) + tx.amount
-      })
-
-      const combined = budgets.map((b) => {
-        const key = `${b.category}-${b.month}`
-        return {
-          category: b.category,
-          month: b.month,
-          Budget: b.amount,
-          Spent: actualByCategoryAndMonth[key] || 0,
+        if (!txRes.ok || !budgetRes.ok) {
+          console.error('Failed to fetch transactions or budgets')
+          return
         }
-      })
 
-      setChartData(combined)
-      setFilteredData(combined)
+        const transactions = await txRes.json()
+        const budgets = await budgetRes.json()
+
+        const actualByCatMonth = {}
+        transactions.forEach((tx) => {
+          const cat = tx.category || 'Uncategorized'
+          const month = tx.date?.slice(0, 7)
+          const key = `${cat}-${month}`
+          actualByCatMonth[key] = (actualByCatMonth[key] || 0) + tx.amount
+        })
+
+        const combined = budgets.map((b) => {
+          const key = `${b.category}-${b.month}`
+          return {
+            category: b.category,
+            month: b.month,
+            Budget: b.amount,
+            Spent: actualByCatMonth[key] || 0,
+          }
+        })
+
+        setChartData(combined)
+        setFilteredData(combined)
+      } catch (error) {
+        console.error('Error loading data:', error)
+      }
     }
 
     loadData()
@@ -79,44 +89,36 @@ export default function BudgetVsActualChart({ refreshFlag }) {
 
   return (
     <Card className="p-4 space-y-4 bg-white dark:bg-gray-700 text-black dark:text-white">
-      {/* Filters */}
       <div className="flex flex-wrap gap-4">
-        {/* Category Filter */}
         <div className="w-full sm:w-1/3">
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="w-full dark:bg-gray-600 dark:text-white peer">
+            <SelectTrigger className="w-full dark:bg-gray-600">
               <SelectValue placeholder="Filter by Category" />
             </SelectTrigger>
-            <SelectContent className="dark:bg-gray-700 dark:text-white">
+            <SelectContent className="dark:bg-gray-700">
               <SelectItem value="__all__">All Categories</SelectItem>
               {uniqueCategories.map((cat) => (
-                <SelectItem key={cat} value={cat}>
-                  {cat}
-                </SelectItem>
+                <SelectItem key={cat} value={cat}>{cat}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
 
-        {/* Month Filter */}
         <div className="w-full sm:w-1/3">
           <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-            <SelectTrigger className="w-full dark:bg-gray-600 dark:text-white peer">
+            <SelectTrigger className="w-full dark:bg-gray-600">
               <SelectValue placeholder="Filter by Month" />
             </SelectTrigger>
-            <SelectContent className="dark:bg-gray-700 dark:text-white">
+            <SelectContent className="dark:bg-gray-700">
               <SelectItem value="__all__">All Months</SelectItem>
               {uniqueMonths.map((m) => (
-                <SelectItem key={m} value={m}>
-                  {getMonthLabel(m)}
-                </SelectItem>
+                <SelectItem key={m} value={m}>{getMonthLabel(m)}</SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
       </div>
 
-      {/* Bar Chart */}
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={filteredData}>
           <XAxis dataKey="category" stroke="currentColor" />

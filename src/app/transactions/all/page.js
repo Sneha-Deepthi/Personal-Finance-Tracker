@@ -4,21 +4,37 @@ import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import TransactionForm from '../TransactionForm'
+import { getUserIdFromCookie } from '@/utils/getUserIdFromCookie'
 
 export default function AllTransactionsPage() {
   const [transactions, setTransactions] = useState([])
   const [editing, setEditing] = useState(null)
+  const [userId, setUserId] = useState(null)
+
+  useEffect(() => {
+    const uid = getUserIdFromCookie()
+    if (!uid) return // optionally redirect or show error
+    setUserId(uid)
+  }, [])
+
   const fetchTransactions = async () => {
-    const res = await fetch('/api/transactions')
+    if (!userId) return
+
+    const res = await fetch(`/api/transactions`, { credentials: 'include' })
+
     const data = await res.json()
     const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date))
     setTransactions(sorted)
   }
 
   const handleDelete = async (id) => {
-    await fetch(`/api/transactions/${id}`, { method: 'DELETE' })
+    await fetch(`/api/transactions/${id}?userId=${userId}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
     fetchTransactions()
   }
+
   const handleEdit = (tx) => {
     setEditing(tx)
   }
@@ -27,21 +43,25 @@ export default function AllTransactionsPage() {
     setEditing(null)
     fetchTransactions()
   }
+
   useEffect(() => {
-    fetchTransactions()
-  }, [])
+    if (userId) {
+      fetchTransactions()
+    }
+  }, [userId])
 
   return (
     <div className="space-y-8 px-4 md:px-8 py-6">
       <h1 className="text-3xl font-bold text-gray-800 dark:text-white">All Transactions</h1>
-        <Button variant="outline" className="mb-4" onClick={() => history.back()}>
-            ← Back
-        </Button>
+
+      <Button variant="outline" className="mb-4" onClick={() => history.back()}>
+        ← Back
+      </Button>
 
       {editing && (
         <Card className="p-4 mb-6">
           <h2 className="text-xl font-semibold mb-2">Edit Transaction</h2>
-          <TransactionForm editing={editing} onSave={handleSaved} />
+          <TransactionForm editing={editing} onSave={handleSaved} userId={userId} />
         </Card>
       )}
 

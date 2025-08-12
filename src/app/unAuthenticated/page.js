@@ -1,35 +1,33 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
-export default function MainPage() {
-  const router = useRouter()
-
+export default function UnAuthenticated() {
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-200 to-blue-300 dark:from-gray-900 dark:to-gray-800 px-4">
       <div className="max-w-4xl text-center space-y-8">
         <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
-          Take Control of Your Finances
+          You are not logged in
         </h1>
         <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
-          Track expenses, set budgets, and visualize your spending — all in one powerful tool.
+          Please log in to access this page.
         </p>
 
         <div className="flex flex-col sm:flex-row justify-center gap-4 mt-6">
-          <Button
-            onClick={() => router.push('/login')}
-            className="px-6 py-3 text-lg font-medium"
-          >
-            Login
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => router.push('/register')}
-            className="px-6 py-3 text-lg font-medium"
-          >
-            Register
-          </Button>
+          <Link href="/login">
+            <Button className="px-6 py-3 text-lg font-medium">
+              Go to Login
+            </Button>
+          </Link>
+          <Link href="/">
+            <Button
+              variant="outline"
+              className="px-6 py-3 text-lg font-medium"
+            >
+              Back to Home
+            </Button>
+          </Link>
         </div>
       </div>
     </main>

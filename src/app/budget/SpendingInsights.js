@@ -1,4 +1,5 @@
 'use client'
+
 import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import {
@@ -23,20 +24,33 @@ export default function SpendingInsights({ refreshFlag }) {
   const [insights, setInsights] = useState([])
   const [allBudgets, setAllBudgets] = useState([])
   const [allTransactions, setAllTransactions] = useState([])
-  const currentMonth = new Date().toISOString().slice(0, 7) // YYYY-MM
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth)
+  const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7))
 
   useEffect(() => {
     const loadData = async () => {
-      const [txRes, budgetRes] = await Promise.all([
-        fetch('/api/transactions'),
-        fetch('/api/budgets'),
-      ])
-      const txs = await txRes.json()
-      const budgets = await budgetRes.json()
+      try {
+        const [txRes, budgetRes] = await Promise.all([
+          fetch('/api/transactions', { credentials: 'include' }),
+          fetch('/api/budgets', { credentials: 'include' }),
+        ])
 
-      setAllTransactions(txs)
-      setAllBudgets(budgets)
+        if (!txRes.ok) {
+          console.error('Transaction API error:', await txRes.text())
+          return
+        }
+        if (!budgetRes.ok) {
+          console.error('Budget API error:', await budgetRes.text())
+          return
+        }
+
+        const txs = await txRes.json()
+        const budgets = await budgetRes.json()
+
+        setAllTransactions(Array.isArray(txs) ? txs : [])
+        setAllBudgets(Array.isArray(budgets) ? budgets : [])
+      } catch (error) {
+        console.error('Error loading data in SpendingInsights:', error)
+      }
     }
 
     loadData()
@@ -73,24 +87,20 @@ export default function SpendingInsights({ refreshFlag }) {
 
   return (
     <Card className="p-4 space-y-4 bg-white dark:bg-gray-700 text-black dark:text-white">
-      {/* Month Filter */}
       <div className="w-full sm:w-1/2">
         <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-          <SelectTrigger className="w-full dark:bg-gray-600 dark:text-white peer">
+          <SelectTrigger className="w-full dark:bg-gray-600">
             <SelectValue placeholder="Filter by Month" />
           </SelectTrigger>
-          <SelectContent className="dark:bg-gray-700 dark:text-white">
+          <SelectContent className="dark:bg-gray-700">
             <SelectItem value="__all__">All Months</SelectItem>
             {uniqueMonths.map((m) => (
-              <SelectItem key={m} value={m}>
-                {getMonthLabel(m)}
-              </SelectItem>
+              <SelectItem key={m} value={m}>{getMonthLabel(m)}</SelectItem>
             ))}
           </SelectContent>
         </Select>
       </div>
 
-      {/* Insights List */}
       <ul className="list-disc list-inside text-sm text-gray-700 dark:text-gray-300">
         {insights.length === 0 ? (
           <li>No insights available for the selected month.</li>

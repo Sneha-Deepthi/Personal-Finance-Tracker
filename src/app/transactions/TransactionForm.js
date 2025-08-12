@@ -7,6 +7,8 @@ import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
 import { Select } from '@/components/ui/select'
 import { categories } from '@/lib/categories' // <-- Define or import category list
+import { getUserIdFromCookie } from '@/utils/getUserIdFromCookie'
+
 
 export default function TransactionForm({ onSave, editing }) {
   const [amount, setAmount] = useState('')
@@ -35,6 +37,7 @@ export default function TransactionForm({ onSave, editing }) {
       description,
       date,
       category,
+      userId: getUserIdFromCookie(),
     }
 
     const method = editing ? 'PUT' : 'POST'
