@@ -35,7 +35,8 @@ export default function LoginPage() {
         return
       }
 
-      router.push('/homepage')
+      window.location.href = '/homepage';
+
     } catch (err) {
       console.error('Login error:', err)
       setError('Something went wrong. Please try again.')
