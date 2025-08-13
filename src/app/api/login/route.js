@@ -3,9 +3,10 @@ import { NextResponse } from 'next/server'
 import { connectDB } from '@/lib/mongo'
 import User from '@/models/Users'
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+import { SignJWT } from 'jose'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key'
+const secretKey = new TextEncoder().encode(JWT_SECRET)
 
 export async function POST(request) {
   try {
@@ -27,21 +28,24 @@ export async function POST(request) {
       return NextResponse.json({ message: 'Invalid password' }, { status: 401 })
     }
 
-    // Create token
-    const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' })
+    // ✅ Create token using jose
+    const token = await new SignJWT({ userId: user._id.toString() })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setIssuedAt()
+      .setExpirationTime('7d')
+      .sign(secretKey)
 
-    // Create response
     const response = NextResponse.json({
       success: true,
       message: 'Login successful',
       user: { id: user._id, name: user.name, email: user.email },
     })
 
-    // Set cookie with matching attributes to middleware expectations
+    // ✅ Set cookie
     response.cookies.set('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Must be true on Vercel
-      sameSite: 'lax', // Use 'lax' for same domain, avoids cross-site issues
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       path: '/',
       maxAge: 60 * 60 * 24 * 7, // 7 days
     })
