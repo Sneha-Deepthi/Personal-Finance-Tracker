@@ -23,17 +23,23 @@ export default function LoginPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
-        credentials: 'include',
+        credentials: 'include', // important for cookies
       })
 
+      let data = {}
+      try {
+        data = await res.json()
+      } catch {
+        // ignore if no JSON body
+      }
+
       if (!res.ok) {
-        const data = await res.json()
         setError(data.message || 'Login failed')
         return
       }
 
-      // ✅ Let browser follow redirect set by API
-      window.location.href = '/homepage'
+      // ✅ Ensure cookies are set before redirect
+      window.location.assign('/homepage')
 
     } catch (err) {
       console.error('Login error:', err)
@@ -48,7 +54,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md p-6 space-y-4 bg-white dark:bg-gray-700 text-black dark:text-white shadow-lg">
         <h2 className="font-bold text-2xl dark:text-cyan-400 text-center">Login</h2>
 
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleLogin} noValidate className="space-y-4">
           <div>
             <Label htmlFor="email" className="dark:text-white py-1">Registered Email</Label>
             <Input
