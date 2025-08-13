@@ -44,7 +44,7 @@ export default function CategoryPieChart({ refreshFlag }) {
       }
 
       try {
-        const res = await fetch(`/api/transactions?userId=${userId}`)
+        const res = await fetch(`/api/transactions`)
         const txs = await res.json()
 
         if (!Array.isArray(txs)) {
