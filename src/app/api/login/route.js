@@ -1,3 +1,4 @@
+// src/app/api/login/route.js
 import { NextResponse } from 'next/server'
 import { connectDB } from '@/lib/mongo'
 import User from '@/models/Users'
@@ -9,7 +10,6 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key'
 export async function POST(request) {
   try {
     const { email, password } = await request.json()
-
     if (!email || !password) {
       return NextResponse.json({ message: 'Email and password are required' }, { status: 400 })
     }
@@ -28,17 +28,14 @@ export async function POST(request) {
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' })
 
-    // ✅ Create response with cookie
-    const response = NextResponse.json({
-      message: 'Login successful',
-      user: { id: user._id, name: user.name, email: user.email },
-    })
+    // ✅ Redirect response after login
+    const response = NextResponse.redirect(new URL('/homepage', request.url))
 
-    // ✅ Set cookie on response
+    // ✅ Set secure cookie for production
     response.cookies.set('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production', // must be true on Vercel
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
       maxAge: 60 * 60 * 24 * 7, // 7 days
     })

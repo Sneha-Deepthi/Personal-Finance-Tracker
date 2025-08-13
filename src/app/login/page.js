@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -13,7 +12,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const router = useRouter()
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -28,14 +26,14 @@ export default function LoginPage() {
         credentials: 'include',
       })
 
-      const data = await res.json()
-
       if (!res.ok) {
+        const data = await res.json()
         setError(data.message || 'Login failed')
         return
       }
 
-      window.location.href = '/homepage';
+      // ✅ Let browser follow redirect set by API
+      window.location.href = '/homepage'
 
     } catch (err) {
       console.error('Login error:', err)
@@ -52,9 +50,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <Label htmlFor="email" className="dark:text-white py-1">
-              Registered Email
-            </Label>
+            <Label htmlFor="email" className="dark:text-white py-1">Registered Email</Label>
             <Input
               id="email"
               type="email"
@@ -68,9 +64,7 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <Label htmlFor="password" className="dark:text-white py-1">
-              Password
-            </Label>
+            <Label htmlFor="password" className="dark:text-white py-1">Password</Label>
             <Input
               id="password"
               type="password"
@@ -83,9 +77,7 @@ export default function LoginPage() {
             />
           </div>
 
-          {error && (
-            <p className="text-red-500 text-sm font-medium -mt-2">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm font-medium -mt-2">{error}</p>}
 
           <Button
             type="submit"
@@ -101,12 +93,10 @@ export default function LoginPage() {
               'Login'
             )}
           </Button>
+
           <div className="text-center text-sm text-gray-600 dark:text-gray-300">
             Don&apos;t have an account?{' '}
-            <Link
-              href="/register"
-              className="text-blue-600 dark:text-blue-400 hover:underline font-medium"
-            >
+            <Link href="/register" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
               Register here
             </Link>
           </div>
