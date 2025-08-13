@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -12,6 +13,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const router = useRouter()
 
   const handleLogin = async (e) => {
     e.preventDefault()
@@ -23,24 +25,17 @@ export default function LoginPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
-        credentials: 'include', // important for cookies
+        credentials: 'include',
       })
 
-      let data = {}
-      try {
-        data = await res.json()
-      } catch {
-        // ignore if no JSON body
-      }
+      const data = await res.json()
 
       if (!res.ok) {
         setError(data.message || 'Login failed')
         return
       }
 
-      // ✅ Ensure cookies are set before redirect
-      window.location.assign('/homepage')
-
+      router.push('/homepage')
     } catch (err) {
       console.error('Login error:', err)
       setError('Something went wrong. Please try again.')

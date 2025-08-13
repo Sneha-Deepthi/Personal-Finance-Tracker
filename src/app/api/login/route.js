@@ -28,16 +28,18 @@ export async function POST(request) {
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' })
 
-    // ✅ Redirect response after login
-    const response = NextResponse.redirect(new URL('/homepage', request.url))
+    const response = NextResponse.json({
+      success: true,
+      message: 'Login successful',
+      user: { id: user._id, name: user.name, email: user.email },
+    })
 
-    // ✅ Set secure cookie for production
     response.cookies.set('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // must be true on Vercel
+      secure: process.env.NODE_ENV === 'production',
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 24 * 7,
     })
 
     return response
