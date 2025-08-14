@@ -158,8 +158,6 @@ export default function MainNav() {
           </div>
         )}
       </div>
-
-
     </div>
   )
 }

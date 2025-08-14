@@ -22,6 +22,6 @@ export async function GET() {
 
   return Response.json({
     email: user.email,
-    userId, // ✅ include this for BudgetPageWrapper
+    userId,
   })
 }

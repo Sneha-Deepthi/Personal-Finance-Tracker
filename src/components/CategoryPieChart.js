@@ -38,14 +38,6 @@ export default function CategoryPieChart({ refreshFlag }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // // ✅ Check if user is authenticated first
-        // const authRes = await fetch('/api/me', { credentials: 'include' })
-        // if (!authRes.ok) {
-        //   console.error('User not logged in')
-        //   setLoading(false)
-        //   return
-        // }
-
         // ✅ Fetch transactions with cookies
         const res = await fetch(`/api/transactions`, { credentials: 'include' })
         if (!res.ok) {

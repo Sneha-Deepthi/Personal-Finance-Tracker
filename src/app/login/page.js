@@ -56,6 +56,7 @@ export default function LoginPage() {
               id="email"
               type="email"
               value={email}
+              autoComplete="email"
               onChange={(e) => setEmail(e.target.value)}
               required
               disabled={loading}
@@ -70,6 +71,7 @@ export default function LoginPage() {
               id="password"
               type="password"
               value={password}
+              autoComplete="password"
               onChange={(e) => setPassword(e.target.value)}
               required
               disabled={loading}

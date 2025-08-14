@@ -7,35 +7,49 @@ import { categories } from '@/lib/categories'
 
 export default function Dashboard({ refreshFlag }) {
   const [transactions, setTransactions] = useState([])
+  const [email, setEmail] = useState('')
   const router = useRouter()
 
   useEffect(() => {
-    const fetchTransactions = async () => {
-      const userId = localStorage.getItem('userId')
-
-      if (!userId) {
-        router.push('/login')
-        return
-      }
-
+    const fetchData = async () => {
       try {
-        const res = await fetch(`/api/transactions?userId=${userId}`)
+        // First get the user info from the cookie-auth endpoint
+        const userRes = await fetch('/api/auth/user', {
+          credentials: 'include',
+        })
 
-        if (!res.ok) {
-          const error = await res.text()
-          console.error('Failed to fetch transactions:', error)
+        if (!userRes.ok) {
+          router.push('/unAuthenticated')
           return
         }
 
-        const data = await res.json()
+        const userData = await userRes.json()
+        if (!userData?.userId) {
+          router.push('/unAuthenticated')
+          return
+        }
+
+        setEmail(userData.email)
+
+        // Fetch transactions for this user
+        const txRes = await fetch(`/api/transactions`, {
+          credentials: 'include',
+        })
+
+        if (!txRes.ok) {
+          console.error('Failed to fetch transactions')
+          return
+        }
+
+        const data = await txRes.json()
         const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date))
         setTransactions(sorted)
       } catch (err) {
-        console.error('Error fetching transactions:', err)
+        console.error('Error fetching dashboard data:', err)
       }
     }
 
-    fetchTransactions()
+    fetchData()
   }, [refreshFlag, router])
 
   const total = transactions.reduce((sum, tx) => sum + tx.amount, 0)
@@ -43,7 +57,8 @@ export default function Dashboard({ refreshFlag }) {
   const categoryTotals = {}
   transactions.forEach((tx) => {
     if (!tx.category) return
-    categoryTotals[tx.category] = (categoryTotals[tx.category] || 0) + tx.amount
+    categoryTotals[tx.category] =
+      (categoryTotals[tx.category] || 0) + tx.amount
   })
 
   const recentTx = transactions.slice(0, 5)
@@ -84,7 +99,9 @@ export default function Dashboard({ refreshFlag }) {
                 >
                   <div>
                     <p className="font-medium">₹{tx.amount}</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-300">{tx.description}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-300">
+                      {tx.description}
+                    </p>
                   </div>
                   <span className="text-xs px-2 py-1 bg-blue-100 dark:bg-gray-800 border border-white dark:border-white text-blue-700 dark:text-blue-50 rounded-full">
                     {tx.category || 'Uncategorized'}

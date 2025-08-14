@@ -28,8 +28,6 @@ export default function TransactionList({ onEdit, refreshFlag, onRefresh , userI
 
   return (
     <div className="p-4 space-y-4 rounded-xl bg-white dark:bg-gray-700 text-black dark:text-white border-1 dark:border-white">
-      {/* <h2 className="font-bold text-2xl dark:text-cyan-400">Transaction List</h2> */}
-
       {recentTx.length === 0 ? (
         <p className="text-gray-500 dark:text-gray-300">No transactions to display.</p>
       ) : (

@@ -7,7 +7,7 @@ import { getUserIdFromToken } from '@/lib/auth'
 export async function GET(req) {
   await connectDB() // also connect before querying
 
-  const cookieStore = await cookies() // ✅ await is required
+  const cookieStore = await cookies()
   const token = cookieStore.get('token')?.value
 
   const userId = await getUserIdFromToken(token)
@@ -23,7 +23,7 @@ export async function GET(req) {
 export async function POST(req) {
   await connectDB()
 
-  const cookieStore = await cookies() // ✅ fixed here
+  const cookieStore = await cookies()
   const token = cookieStore.get('token')?.value
   const userId = await getUserIdFromToken(token)
 

@@ -5,10 +5,14 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
-import { Select } from '@/components/ui/select'
-import { categories } from '@/lib/categories' // <-- Define or import category list
-import { getUserIdFromCookie } from '@/utils/getUserIdFromCookie'
-
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/ui/select'
+import { categories } from '@/lib/categories'
 
 export default function TransactionForm({ onSave, editing }) {
   const [amount, setAmount] = useState('')
@@ -66,6 +70,7 @@ export default function TransactionForm({ onSave, editing }) {
             onChange={(e) => setAmount(e.target.value)}
             placeholder="Enter amount"
             className="dark:text-white dark:placeholder-gray-100"
+            autoComplete="off"
           />
         </div>
         <div>
@@ -76,6 +81,7 @@ export default function TransactionForm({ onSave, editing }) {
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Enter description"
             className="dark:text-white dark:placeholder-gray-100"
+            autoComplete="off"
           />
         </div>
         <div>
@@ -85,24 +91,28 @@ export default function TransactionForm({ onSave, editing }) {
             value={date}
             onChange={(e) => setDate(e.target.value)}
             className="dark:text-white dark:placeholder-gray-100"
+            autoComplete="off"
           />
         </div>
         <div>
           <Label className="py-2 dark:text-white text-md">Category</Label>
-          <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full border rounded p-2 dark:bg-gray-600 dark:text-white"
-          >
-            <option value="">Select category</option>
-            {categories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
+          <Select value={category} onValueChange={setCategory}>
+            <SelectTrigger className="w-full dark:bg-gray-600 dark:text-white">
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map((cat) => (
+                <SelectItem key={cat} value={cat}>
+                  {cat}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
-        <Button type="submit" className="w-full dark:text-black dark:bg-white dark:hover:bg-white">
+        <Button
+          type="submit"
+          className="w-full dark:text-black dark:bg-white dark:hover:bg-white"
+        >
           {editing ? 'Update Transaction' : 'Add Transaction'}
         </Button>
       </form>

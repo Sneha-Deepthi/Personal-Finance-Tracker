@@ -27,8 +27,6 @@ export async function POST(request) {
     if (!isPasswordCorrect) {
       return NextResponse.json({ message: 'Invalid password' }, { status: 401 })
     }
-
-    // ✅ Create token using jose
     const token = await new SignJWT({ userId: user._id.toString() })
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()

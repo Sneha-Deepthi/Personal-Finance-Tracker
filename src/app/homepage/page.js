@@ -1,18 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-// import { useRouter } from 'next/navigation'
-
 import Dashboard from '@/components/Dashboard'
 import TransactionForm from '@/app/transactions/TransactionForm'
 import CategoryPieChart from '@/components/CategoryPieChart'
 
 export default function Home() {
   const [refreshFlag, setRefreshFlag] = useState(0)
-  // const [userId, setUserId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [email, setEmail]=useState('')
-  // const router = useRouter()
 
   useEffect(() => {
     const fetchUser = async () => {

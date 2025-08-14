@@ -7,7 +7,7 @@ import { cookies } from 'next/headers'
 // UPDATE transaction
 export async function PUT(req, context) {
   try {
-    const { id } = await context.params // ✅ await params
+    const { id } = await context.params
     await connectDB()
 
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {
@@ -46,7 +46,7 @@ export async function PUT(req, context) {
 // DELETE transaction
 export async function DELETE(req, context) {
   try {
-    const { id } = await context.params // ✅ await params
+    const { id } = await context.params
     await connectDB()
 
     if (!id || !mongoose.Types.ObjectId.isValid(id)) {

@@ -33,8 +33,8 @@ export default function BudgetVsActualChart({ refreshFlag }) {
     const loadData = async () => {
       try {
         const [txRes, budgetRes] = await Promise.all([
-          fetch(`/api/transactions`), // ✅ removed userId param
-          fetch(`/api/budgets`),      // ✅ removed userId param
+          fetch(`/api/transactions`),
+          fetch(`/api/budgets`),
         ])
 
         if (!txRes.ok || !budgetRes.ok) {

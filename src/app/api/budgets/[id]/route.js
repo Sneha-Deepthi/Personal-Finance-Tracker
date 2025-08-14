@@ -3,7 +3,6 @@ import Budget from '@/models/Budget'
 import { cookies } from 'next/headers'
 import { getUserIdFromToken } from '@/lib/auth'
 
-// PUT: Update a budget by ID (optional, not needed if you only show error)
 export async function PUT(req, context) {
   await connectDB()
 
@@ -14,8 +13,6 @@ export async function PUT(req, context) {
   if (!userId) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
-
-  // Get dynamic route params
   const { params } = context
   const id = params.id
 
