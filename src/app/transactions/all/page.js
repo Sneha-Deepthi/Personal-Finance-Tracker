@@ -4,36 +4,30 @@ import { useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import TransactionForm from '../TransactionForm'
-import { getUserIdFromCookie } from '@/utils/getUserIdFromCookie'
-import mongoose from 'mongoose'
 
 export default function AllTransactionsPage() {
   const [transactions, setTransactions] = useState([])
   const [editing, setEditing] = useState(null)
-  const [userId, setUserId] = useState(null)
-
-  useEffect(() => {
-    const uid = getUserIdFromCookie()
-    if (!uid) return
-    setUserId(uid)
-  }, [])
 
   const fetchTransactions = async () => {
-    if (!userId) return
-    const res = await fetch(`/api/transactions`, { credentials: 'include' })
-    const data = await res.json()
-    const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date))
-    setTransactions(sorted)
+    try {
+      const res = await fetch(`/api/transactions`, { credentials: 'include' })
+      if (!res.ok) throw new Error('Failed to fetch')
+      const data = await res.json()
+      const sorted = data.sort((a, b) => new Date(b.date) - new Date(a.date))
+      setTransactions(sorted)
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   const handleDelete = async (id) => {
-    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+    if (!id) {
       alert('Invalid transaction ID.')
       return
     }
 
-    const confirmDelete = confirm('Are you sure you want to delete this transaction?')
-    if (!confirmDelete) return
+    if (!confirm('Are you sure you want to delete this transaction?')) return
 
     const res = await fetch(`/api/transactions/${id}`, {
       method: 'DELETE',
@@ -48,9 +42,7 @@ export default function AllTransactionsPage() {
     }
   }
 
-  const handleEdit = (tx) => {
-    setEditing(tx)
-  }
+  const handleEdit = (tx) => setEditing(tx)
 
   const handleSaved = () => {
     setEditing(null)
@@ -58,10 +50,8 @@ export default function AllTransactionsPage() {
   }
 
   useEffect(() => {
-    if (userId) {
-      fetchTransactions()
-    }
-  }, [userId])
+    fetchTransactions()
+  }, [])
 
   return (
     <div className="space-y-8 px-4 md:px-8 py-6">
@@ -74,7 +64,7 @@ export default function AllTransactionsPage() {
       {editing && (
         <Card className="p-4 mb-6">
           <h2 className="text-xl font-semibold mb-2">Edit Transaction</h2>
-          <TransactionForm editing={editing} onSave={handleSaved} userId={userId} />
+          <TransactionForm editing={editing} onSave={handleSaved} />
         </Card>
       )}
 

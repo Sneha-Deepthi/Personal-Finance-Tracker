@@ -18,6 +18,7 @@ export default function BudgetForm({ onSaved, initialData }) {
   const [category, setCategory] = useState('')
   const [amount, setAmount] = useState('')
   const [month, setMonth] = useState(() => new Date().toISOString().slice(0, 7))
+  const [error, setError] = useState('')
 
   useEffect(() => {
     if (initialData) {
@@ -29,22 +30,25 @@ export default function BudgetForm({ onSaved, initialData }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('')
 
     const method = initialData ? 'PUT' : 'POST'
     const url = initialData ? `/api/budgets/${initialData._id}` : `/api/budgets`
 
-    await fetch(url, {
+    const res = await fetch(url, {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        category,
-        amount: parseFloat(amount),
-        month,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ category, amount: parseFloat(amount), month }),
     })
 
+    const data = await res.json()
+
+    if (!res.ok) {
+      setError(data.error || 'Something went wrong')
+      return
+    }
+
+    // Reset form after successful save
     setCategory('')
     setAmount('')
     setMonth(new Date().toISOString().slice(0, 7))
@@ -53,6 +57,8 @@ export default function BudgetForm({ onSaved, initialData }) {
 
   return (
     <Card className="p-6 space-y-4 bg-white dark:bg-gray-700 text-black dark:text-white">
+      {error && <p className="text-red-500">{error}</p>}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <Label className="py-2 dark:text-white text-md">Category</Label>

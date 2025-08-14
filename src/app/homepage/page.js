@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 
 import Dashboard from '@/components/Dashboard'
 import TransactionForm from '@/app/transactions/TransactionForm'
@@ -9,16 +9,20 @@ import CategoryPieChart from '@/components/CategoryPieChart'
 
 export default function Home() {
   const [refreshFlag, setRefreshFlag] = useState(0)
-  const [userId, setUserId] = useState(null)
+  // const [userId, setUserId] = useState(null)
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
+  const [email, setEmail]=useState('')
+  // const router = useRouter()
 
   useEffect(() => {
     const fetchUser = async () => {
       const res = await fetch('/api/auth/user', {
         credentials: 'include', // send cookies
       })
-
+      if(res.ok){
+        const data=await res.json()
+        setEmail(data.email)
+      }
       setLoading(false)
     }
 
@@ -34,8 +38,11 @@ export default function Home() {
 
   return (
     <main className="px-4 sm:px-6 py-6 max-w-7xl mx-auto space-y-8">
+      <p className="text-sm text-gray-500 dark:text-gray-300">
+        Logged in as: <span className="font-medium">{email}</span>
+      </p>
       <section>
-        <Dashboard refreshFlag={refreshFlag} userId={userId} />
+        <Dashboard refreshFlag={refreshFlag}/>
       </section>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -44,7 +51,7 @@ export default function Home() {
             <h2 className="font-bold text-2xl dark:text-cyan-400 py-1">
               Add New Transaction
             </h2>
-            <TransactionForm onSave={handleSave} userId={userId} />
+            <TransactionForm onSave={handleSave}/>
           </div>
         </section>
 
@@ -53,7 +60,7 @@ export default function Home() {
             <h3 className="font-bold text-2xl dark:text-cyan-400 py-1">
               Expenses by Category
             </h3>
-            <CategoryPieChart refreshFlag={refreshFlag} userId={userId} />
+            <CategoryPieChart refreshFlag={refreshFlag}/>
           </div>
         </section>
       </div>

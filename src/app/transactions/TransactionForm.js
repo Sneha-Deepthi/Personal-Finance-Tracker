@@ -37,7 +37,6 @@ export default function TransactionForm({ onSave, editing }) {
       description,
       date,
       category,
-      userId: getUserIdFromCookie(),
     }
 
     const method = editing ? 'PUT' : 'POST'

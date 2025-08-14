@@ -36,8 +36,8 @@ export default function TransactionsPage() {
   return (
     <div className="space-y-8 px-4 sm:px-6 py-6 max-w-7xl mx-auto">
       <p className="text-sm text-gray-500 dark:text-gray-300">
-      Logged in as: <span className="font-medium">{email}</span>
-    </p>
+        Logged in as: <span className="font-medium">{email}</span>
+      </p>
       <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Transactions</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

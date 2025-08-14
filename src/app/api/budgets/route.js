@@ -30,6 +30,21 @@ export async function POST(req) {
   }
 
   const { category, amount, month } = await req.json()
+
+  if (!category || !amount || !month) {
+    return Response.json({ error: 'All fields are required' }, { status: 400 })
+  }
+
+  // Check if budget already exists for this category & month
+  const existingBudget = await Budget.findOne({ userId, category, month })
+
+  if (existingBudget) {
+    return Response.json(
+      { error: 'Budget already exists for this category and month', existingBudget },
+      { status: 409 }
+    )
+  }
+
   const newBudget = await Budget.create({ category, amount, month, userId })
   return Response.json(newBudget)
 }
