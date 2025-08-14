@@ -16,26 +16,30 @@ export default function Home() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch('/api/me')
+        const res = await fetch('/api/me', {
+          credentials: 'include', // ✅ send cookies
+        })
         if (!res.ok) {
           router.push('/login')
           return
         }
         const data = await res.json()
         setUserId(data.userId)
-        setLoading(false)
       } catch (err) {
         console.error('Error fetching user:', err)
         router.push('/login')
+      } finally {
+        setLoading(false)
       }
     }
 
-    fetchUser()
+    // ✅ small delay to let cookie set after login
+    setTimeout(fetchUser, 150)
   }, [router])
 
   const handleSave = () => {
     setRefreshFlag((prev) => prev + 1)
-    alert("New transaction has been added")
+    alert('New transaction has been added')
   }
 
   if (loading) return <p className="text-center mt-10">Loading...</p>
@@ -46,7 +50,7 @@ export default function Home() {
         <Dashboard refreshFlag={refreshFlag} userId={userId} />
       </section>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <section>
           <div className="p-4 rounded-xl shadow bg-white dark:bg-gray-900">
             <h2 className="font-bold text-2xl dark:text-cyan-400 py-1">

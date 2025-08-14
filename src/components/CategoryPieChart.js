@@ -33,35 +33,49 @@ export default function CategoryPieChart({ refreshFlag }) {
   const [selectedMonth, setSelectedMonth] = useState('')
   const [selectedYear, setSelectedYear] = useState('')
   const [availableYears, setAvailableYears] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  // ✅ Check if user is logged in before fetching
   useEffect(() => {
     const fetchData = async () => {
-      const userId = localStorage.getItem('userId')
-      if (!userId) {
-        console.error('User not logged in')
-        return
-      }
-
       try {
-        const res = await fetch(`/api/transactions`)
+        // // ✅ Check if user is authenticated first
+        // const authRes = await fetch('/api/me', { credentials: 'include' })
+        // if (!authRes.ok) {
+        //   console.error('User not logged in')
+        //   setLoading(false)
+        //   return
+        // }
+
+        // ✅ Fetch transactions with cookies
+        const res = await fetch(`/api/transactions`, { credentials: 'include' })
+        if (!res.ok) {
+          console.error('Failed to fetch transactions:', res.status, await res.text())
+          setLoading(false)
+          return
+        }
+
         const txs = await res.json()
 
         if (!Array.isArray(txs)) {
           console.error('Expected array but got:', txs)
+          setLoading(false)
           return
         }
 
         setTransactions(txs)
 
+        // ✅ Extract unique years for filter
         const years = [...new Set(txs.map((tx) => new Date(tx.date).getFullYear()))]
         setAvailableYears(years.sort((a, b) => b - a))
 
+        // ✅ Default to current month/year
         const today = new Date()
         setSelectedMonth(String(today.getMonth()))
         setSelectedYear(String(today.getFullYear()))
       } catch (err) {
         console.error('Failed to fetch transactions:', err)
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -91,6 +105,14 @@ export default function CategoryPieChart({ refreshFlag }) {
 
     setData(chartData)
   }, [transactions, selectedMonth, selectedYear])
+
+  if (loading) {
+    return (
+      <Card className="p-4 bg-white dark:bg-gray-700 text-black dark:text-white w-full max-w-full">
+        <p className="text-center">Loading chart...</p>
+      </Card>
+    )
+  }
 
   return (
     <Card className="p-4 bg-white dark:bg-gray-700 text-black dark:text-white w-full max-w-full">

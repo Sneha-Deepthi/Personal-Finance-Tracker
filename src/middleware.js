@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key'
 const secretKey = new TextEncoder().encode(JWT_SECRET)
 
 export const config = {
-  matcher: ['/transactions/:path*', '/budget/:path*', '/homepage/:path*'],
+  matcher: ['/transactions/:path*', '/budget/:path*','/homepage/:path*'],
 }
 
 export async function middleware(request) {
