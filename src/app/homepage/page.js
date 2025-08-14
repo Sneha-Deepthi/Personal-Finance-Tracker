@@ -15,27 +15,15 @@ export default function Home() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        const res = await fetch('/api/me', {
-          credentials: 'include', // ✅ send cookies
-        })
-        if (!res.ok) {
-          router.push('/login')
-          return
-        }
-        const data = await res.json()
-        setUserId(data.userId)
-      } catch (err) {
-        console.error('Error fetching user:', err)
-        router.push('/login')
-      } finally {
-        setLoading(false)
-      }
+      const res = await fetch('/api/auth/user', {
+        credentials: 'include', // send cookies
+      })
+
+      setLoading(false)
     }
 
-    // ✅ small delay to let cookie set after login
-    setTimeout(fetchUser, 150)
-  }, [router])
+    fetchUser()
+  }, [])
 
   const handleSave = () => {
     setRefreshFlag((prev) => prev + 1)

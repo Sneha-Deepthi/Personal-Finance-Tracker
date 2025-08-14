@@ -22,7 +22,7 @@ export async function middleware(request) {
     await jwtVerify(token, secretKey)
   } catch (err) {
     console.error('JWT verification failed:', err)
-    return NextResponse.redirect(new URL('/login', request.url))
+    return NextResponse.redirect(new URL('/unAuthenticated', request.url))
   }
 
   return NextResponse.next()
